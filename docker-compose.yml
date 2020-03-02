@@ -1,0 +1,45 @@
+version: '3.1'
+services:
+
+  apache-php:
+    build:
+      dockerfile: Dockerfile
+      context: 'apache-php'
+    image: apache-php:7.3
+    restart: always
+    volumes:
+      - ./_host-volumes/app:/app:delegated
+      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+    ports:
+      - 80:80
+
+  db:
+    image: mariadb
+    restart: always
+    volumes:
+      - ./_host-volumes/data:/var/lib/mysql:delegated
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+
+#  adminer:
+#    image: adminer
+#    restart: always
+#    ports:
+#      - 8080:8080
+
+  memcached:
+    image: memcached
+    restart: always
+
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    #container_name: phpmyadmin
+    environment:
+     - PMA_ARBITRARY=1
+    restart: always
+    ports:
+     - 8081:80
+    volumes:
+     - ./_host-volumes/pma_sessions:/sessions:delegated
+     - ./_host-volumes/pma:/var/www/html
