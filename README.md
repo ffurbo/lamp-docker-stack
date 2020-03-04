@@ -1,1 +1,1 @@
-# yii2-docker-stack
+# lamp-docker-stack
