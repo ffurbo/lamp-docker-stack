@@ -5,10 +5,10 @@ services:
     build:
       dockerfile: Dockerfile
       context: 'apache-php'
-    image: apache-php:7.3
+    image: apache-php:php7.4-symfony
     restart: always
     volumes:
-      - ./_host-volumes/app:/app:delegated
+      - ./_host-volumes/projects:/projects:delegated
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
     ports:
       - 80:80
@@ -27,9 +27,9 @@ services:
 #    ports:
 #      - 8080:8080
 
-  memcached:
-    image: memcached
-    restart: always
+#  memcached:
+#    image: memcached
+#    restart: always
 
 
   phpmyadmin:
@@ -39,7 +39,7 @@ services:
      - PMA_ARBITRARY=1
     restart: always
     ports:
-     - 8081:80
+     - 8080:80
     volumes:
      - ./_host-volumes/pma_sessions:/sessions:delegated
      - ./_host-volumes/pma:/var/www/html
