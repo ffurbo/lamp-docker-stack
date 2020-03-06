@@ -23,8 +23,6 @@ RUN apt-get update \
 #        rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
-# Add configuration files
-COPY image-files/ /
 
 RUN docker-php-ext-configure gd && \
     docker-php-ext-install \
@@ -42,9 +40,16 @@ RUN printf "\n" | pecl install \
         imagick \
         memcache
 
-#RUN mkdir -p /app/web/
-#RUN echo "<?php phpinfo();">/app/web/phpinfo.php
-#RUN echo "<?php phpinfo();">/var/www/html/phpinfo.php
+# Environment settings
+ENV PHP_USER_ID=33 \
+    PHP_ENABLE_XDEBUG=0 \
+    PATH=/projects:/root/.composer/vendor/bin:$PATH \
+    TERM=linux \
+#    VERSION_PRESTISSIMO_PLUGIN=^0.3.7 \
+    COMPOSER_ALLOW_SUPERUSER=1
+
+# Add configuration files
+COPY image-files/ /
 
 # Enable mod_rewrite for images with apache
 RUN if command -v a2enmod >/dev/null 2>&1; then \
